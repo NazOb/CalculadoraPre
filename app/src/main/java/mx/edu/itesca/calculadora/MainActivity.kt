@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
         val tv_op:TextView = findViewById(R.id.tv_op)
 
         btn_delete.setOnClickListener {
-            tv_op.setText("")
-            tv_result.setText("0")
+            var s = tv_op.text.toString()
+            var s1 = s.dropLast(1)
+            tv_op.setText(s1)
         }
 
         btn_1.setOnClickListener {
@@ -109,28 +110,52 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_plus.setOnClickListener {
-            var s = tv_op.text.toString()
+            var ans = tv_result.text.toString()
+            var s = ""
+            if(!ans.isNullOrBlank())
+                s = ans
+            else
+                s = tv_op.text.toString()
+
             var s1 = "+"
 
             tv_op.setText(s+s1)
         }
 
         btn_minus.setOnClickListener {
-            var s = tv_op.text.toString()
+            var ans = tv_result.text.toString()
+            var s = ""
+            if(!ans.isNullOrBlank())
+                s = ans
+            else
+                s = tv_op.text.toString()
+
             var s1 = "-"
 
             tv_op.setText(s+s1)
         }
 
         btn_mult.setOnClickListener {
-            var s = tv_op.text.toString()
+            var ans = tv_result.text.toString()
+            var s = ""
+            if(!ans.isNullOrBlank())
+                s = ans
+            else
+                s = tv_op.text.toString()
+
             var s1 = "*"
 
             tv_op.setText(s+s1)
         }
 
         btn_div.setOnClickListener {
-            var s = tv_op.text.toString()
+            var ans = tv_result.text.toString()
+            var s = ""
+            if(!ans.isNullOrBlank())
+                s = ans
+            else
+                s = tv_op.text.toString()
+
             var s1 = "/"
 
             tv_op.setText(s+s1)
@@ -142,23 +167,63 @@ class MainActivity : AppCompatActivity() {
             var n1 = ""
             var n2 = ""
             var oper = ""
-            var result = ""
+            var result = 0
+            var foundOperator = false
 
-            for (i in op.indices)
+            for (i in op.indices) {
                 if (op[i].isDigit()) {
-                    if (oper.length < 0)
-                        n1 = n1 + op[i]
-                    else
-                        n2 = n2 + op[i]
-                }else {
-                    oper = op[i].toString()
+                    if (!foundOperator) {
+                        n1 += op[i]
+                    } else {
+                        n2 += op[i]
+                    }
+                } else {
+                    if (!foundOperator) { // Solo detecta el primer operador
+                        oper = op[i].toString()
+                        foundOperator = true
+                    }
+                }
+            }
+
+            // Verificamos que tengamos números válidos antes de convertirlos
+            if (n1.isNotEmpty() && n2.isNotEmpty()) {
+                val nu1 = n1.toInt()
+                val nu2 = n2.toInt()
+
+                when (oper) {
+                    "+" -> result = nu1 + nu2
+                    "-" -> result = nu1 - nu2
+                    "*" -> result = nu1 * nu2
+                    "/" -> result = if (nu2 != 0) nu1 / nu2 else 0 // Evita división por 0
                 }
 
-            if(oper=="+")
-                result = (n1.toInt()+n2.toInt()).toString()
+                tv_result.text = result.toString()
+            } else {
+                tv_result.text = "Error"
+            }
+//
+//            for (i in op.indices)
+//                if (op[i].isDigit()) {
+//                    if (oper.length < 0)
+//                        n1 = n1 + op[i]
+//                    else
+//                        n2 = n2 + op[i]
+//                }else {
+//                    oper = op[i].toString()
+//                }
+
+//            var nu1 = n1.toInt()
+//            var nu2 = n2.toInt()
+
+//            when(oper){
+//                "+" -> result = nu1+nu2
+//            }
+
+//            if(oper=="+")
+//                result = (n1.toInt()+n2.toInt()).toString()
 
 
-            tv_result.setText(result)
+//            tv_result.setText(result.toString())
 
         }
 
